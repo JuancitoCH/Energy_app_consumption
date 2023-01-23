@@ -1,5 +1,6 @@
 use sysinfo::{System, SystemExt, ProcessExt,Pid};
 use std::io::{stdin};
+use std::{thread,time};
 fn main() {
     menu();
 }
@@ -73,9 +74,20 @@ fn detail_one_process(){
     
     match sys.process(pid){
         Some(process_result)=>{
+            
+            let cpus = sys.cpus().len() as f32;
             println!("Process Name: {}",process_result.name());
             println!("Process memory consumption: {} bytes",process_result.memory());
-            println!("Process cpu consumption: {} %",process_result.cpu_usage());
+            println!("Process cpu usage : {} %",process_result.cpu_usage());
+            println!("Process parent pid: {} %",process_result.parent().unwrap_or(Pid::from(0)));
+            println!("Process Status: {}",process_result.status());
+            let mut op =0;
+            while op !=40 {
+                sleetpp(200);
+                sys.refresh_cpu();
+                println!("Process cpu consumption: {} %",sys.process(pid).unwrap().cpu_usage()/cpus);
+                op+=1;
+            }
         },
         None=>{
             println!("Process don't exist")
@@ -84,7 +96,12 @@ fn detail_one_process(){
 
 }
 
-
+fn sleetpp(time:u64){
+    let time_millis = time::Duration::from_millis(time);
+    // let now = time::Instant::now();
+    thread::sleep(time_millis);
+    // println!("{:?}",now.elapsed());
+}
 // fn press_anykey_to_continue(){
 //     println!("Press any Key to continue");
 //     stdin().read_line(&mut String::new()).unwrap();
