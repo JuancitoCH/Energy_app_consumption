@@ -78,14 +78,14 @@ fn detail_one_process(){
             let cpus = sys.cpus().len() as f32;
             println!("Process Name: {}",process_result.name());
             println!("Process memory consumption: {} bytes",process_result.memory());
-            println!("Process cpu usage : {} %",process_result.cpu_usage());
-            println!("Process parent pid: {} %",process_result.parent().unwrap_or(Pid::from(0)));
+            println!("Process cpu usage : {} %",process_result.cpu_usage()/cpus);
+            println!("Process parent pid: {} ",process_result.parent().unwrap_or(Pid::from(0)));
             println!("Process Status: {}",process_result.status());
             let mut op =0;
             while op !=40 {
                 sleetpp(200);
-                sys.refresh_cpu();
-                println!("Process cpu consumption: {} %",sys.process(pid).unwrap().cpu_usage()/cpus);
+                sys.refresh_all();
+                println!("Process cpu usage: {} %",sys.process(pid).unwrap().cpu_usage()/cpus);
                 op+=1;
             }
         },
