@@ -1,19 +1,21 @@
-use sysinfo::{System, SystemExt, ProcessExt,Pid};
+use sysinfo::{System,Pid, SystemExt, ProcessExt};
 use std::io::{stdin};
 use std::{thread,time};
+
 fn main() {
+    components_computer();
     menu();
 }
 
 fn menu(){
     let mut option_menu =1;
     while option_menu !=0 {
-        println!("Welcome Menu😀");
+        println!("--------Menu😀--------");
         println!("[1] - List App Process");
         println!("[2] - Detail one Process by his PID");
-        println!("[3] - Detail one Process by name");
+        // println!("[3] - Detail one Process by name");
         println!("[0] - Exit");
-        println!("Please Select an Option : ");
+        println!("Please Select an Option []: ");
 
         let mut buffer_read = String::new();
         stdin().read_line(&mut buffer_read ).unwrap();
@@ -26,7 +28,7 @@ fn menu(){
             }
         };
         match option_menu {
-            0=>println!("Good Bye"),
+            0=>println!("Good Bye!!"),
             1=>list_all_process(),
             2=>detail_one_process(),
             _=>{
@@ -34,7 +36,8 @@ fn menu(){
                 println!("INPUT INCORRECT PLEASE TRY AGAIN");
             }
         }
-        println!("\n\n");
+        press_enter_to_continue();
+        println!("");
     }
 }
 
@@ -45,7 +48,7 @@ fn list_all_process(){
     let mut number_process =0;
     let mut process_vec:Vec<String> = vec![];
     for (pid, process) in sys.processes() {
-        process_vec.push(format!("{} PID{}", process.name(), pid));
+        process_vec.push(format!("{} [PID 🆔: {}]", process.name(), pid));
     }
     process_vec.sort();
     for pr in process_vec {
@@ -102,8 +105,18 @@ fn sleetpp(time:u64){
     thread::sleep(time_millis);
     // println!("{:?}",now.elapsed());
 }
-// fn press_anykey_to_continue(){
-//     println!("Press any Key to continue");
-//     stdin().read_line(&mut String::new()).unwrap();
 
-// }
+fn press_enter_to_continue(){
+    println!("Press Enter to continue...");
+    stdin().read_line(&mut String::new()).unwrap();
+}
+
+fn components_computer(){
+    let mut sys = System::new_all();
+    sys.refresh_all();
+    sleetpp(100);
+    println!("{:#?}",sys.global_cpu_info());
+    println!("{:#?}",sys.cpus());
+    println!("Ram memory {:?} bytes",sys.total_memory());
+    
+}
