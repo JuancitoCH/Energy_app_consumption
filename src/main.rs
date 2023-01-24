@@ -14,10 +14,9 @@ fn main() {
 fn menu(){
     let mut option_menu =1;
     while option_menu !=0 {
-        println!("--------Menu😀--------");
+        println!("--------Menu--------");
         println!("[1] - List App Process");
         println!("[2] - Detail one Process by his PID");
-        // println!("[3] - Detail one Process by name");
         println!("[0] - Exit");
         println!("{}","Please Select an Option []: ".italic());
 
@@ -87,7 +86,7 @@ fn detail_one_process(){
             println!("Process parent pid: {} ",process_result.parent().unwrap_or(Pid::from(0)).to_string().green());
             println!("Process Status: {}",process_result.status().to_string().green());
             println!("Process memory consumption: {} {}",process_result.memory().to_string().green(),"bytes".green());
-            
+
             let mut op =0;
             let mut metrics_cpu:Vec<f32> = vec![];
             println!("{}","Taking metrics of CPU usage, Please Wait a few seconds...".italic());
@@ -99,6 +98,7 @@ fn detail_one_process(){
                 op+=1;
             }
             let components = components_computer();
+            println!("CPU: {} GHz",components.cpu_frequency_ghz);
             let avarage_cpu_usage =average(metrics_cpu)/8.0;
             println!("Process cpu usage : {} {}",&avarage_cpu_usage.to_string().green(),"%".green());
 
